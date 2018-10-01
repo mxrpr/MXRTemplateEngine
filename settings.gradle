@@ -1,2 +1,3 @@
 rootProject.name = 'exp2rpn'
+include 'exp2rpn'
 
