@@ -5,7 +5,6 @@ import java.io.File
 import java.util.*
 
 
-
 /**
  * From an input string or file parses the
  * template and generates the output
@@ -33,16 +32,16 @@ class MXRTemplateEngine(private val content: String) {
             "$BLOCK_TOKEN_START.+?$BLOCK_TOKEN_END|" +
             "[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]+|" +
             "\\{[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*|" +
-             "[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*\\}"
+            "[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*\\}"
 //            "({(?!\\{))?[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*"
-            // "\\{(?!\\{)"
-            //"[\\w\\s:;\\.><|'\\/-=]+"
+    // "\\{(?!\\{)"
+    //"[\\w\\s:;\\.><|'\\/-=]+"
 
 
     /**
      * Constructor with file
      *
-     * @param File The file containing the text
+     * @param file  The file containing the text
      */
     constructor(file: File) : this(file.readText())
 
@@ -128,8 +127,7 @@ class MXRTemplateEngine(private val content: String) {
                 // pop last element from stack
                 scopeStack.pop()
                 // check for end tags
-            }
-            else {
+            } else {
                 val node = this.createNodeFromToken(token)
                 parentNode.childrens.add(node)
                 if (node.hasScope)
@@ -143,7 +141,7 @@ class MXRTemplateEngine(private val content: String) {
     /**
      * Divide the content by tokens
      *
-     * @param String The content
+     * @param content The content
      * @return Array<String> Array of strng chunks
      */
     private fun getStringTokens(content: String): Array<String> {
