@@ -14,17 +14,18 @@ class TemplateTests {
     fun testVariable() {
         val context = Context()
         context.addVariable("testVariable", "Test content")
-        val templateString = "this is a template with variable {{testVariable}}"
+        val templateString = "this is a template with variable {{testVariable}}."
         val result = this.runTemplate(templateString, context)
-        Assert.assertEquals(result, "this is a template with variable Test content")
+        println("Result: '$result'")
+        Assert.assertEquals(result, "this is a template with variable Test content.")
     }
 
     @Test
     fun testTextNode() {
         val context = Context()
-        val templateString = "this is a template with variable."
+        val templateString = "this is a template without variable."
         val result = this.runTemplate(templateString, context)
-        Assert.assertEquals(result, "this is a template with variable")
+        Assert.assertEquals(result, "this is a template without variable.")
     }
 
     @Test
@@ -203,16 +204,14 @@ class TemplateTests {
         Assert.assertEquals(result, "a b")
     }
 
-    @Test
+    @Test(expected = Exception::class)
     fun testIfNode_false_with_else() {
         val context = Context()
         context.addVariable("var", 2)
         context.addVariable("var2", 1)
 
         val templateString = "a {% if var < var2 %} this should not appear {% else %} this should appear {% end %}b"
-        val result = this.runTemplate(templateString, context)
-        println("Result: $result")
-        Assert.assertEquals(result, "a  this should appear b")
+        this.runTemplate(templateString, context)
     }
 
     @Test(expected = Exception::class)
@@ -225,6 +224,32 @@ class TemplateTests {
         val result = this.runTemplate(templateString, context)
         println("Result: $result")
         Assert.assertEquals(result, "a  this should appear b")
+    }
+
+    @Test
+    fun testEmptyString() {
+        val context = Context()
+        val templateString = ""
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals(result, "")
+    }
+
+    @Test
+    fun testString_without_any_template() {
+        val context = Context()
+        val templateString = "this is a test sentence"
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals(result, "this is a test sentence")
+    }
+
+    @Test
+    fun testString_with_spec_characters() {
+        val context = Context()
+        val templateString = "this is a {test sentence"
+        val result = this.runTemplate(templateString, context)
+        Assert.assertEquals(result, "this is a {test sentence")
     }
 
 }
