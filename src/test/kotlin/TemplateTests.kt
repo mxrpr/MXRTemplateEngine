@@ -249,7 +249,19 @@ class TemplateTests {
         val context = Context()
         val templateString = "this is a {test sentence"
         val result = this.runTemplate(templateString, context)
+
         Assert.assertEquals(result, "this is a {test sentence")
+    }
+
+    @Test
+    fun testString_with_expression() {
+        val context = Context()
+        context.addVariable("var1", 2)
+        context.addVariable("var2", 2)
+            val templateString = "this is a test sentence {{= var1 + var2 }}"
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals(result, "this is a test sentence 4.0")
     }
 
     @Test
@@ -263,4 +275,5 @@ class TemplateTests {
         context.clean()
         Assert.assertFalse(context.containsVariable("var1"))
     }
+
 }
