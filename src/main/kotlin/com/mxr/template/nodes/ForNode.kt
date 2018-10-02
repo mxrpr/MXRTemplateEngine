@@ -17,8 +17,8 @@ class ForNode(text: String) : Node(text) {
         if (components.size < 4) {
             throw Exception("Problem in parsing element: '${this.text}'")
         }
-        this.variableName = components[3]
-        this.loopVariableName = components[1]
+        this.variableName = components[4]
+        this.loopVariableName = components[2]
     }
 
     override fun render(context: Context): String {
