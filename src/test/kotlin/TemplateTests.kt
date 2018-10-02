@@ -252,4 +252,15 @@ class TemplateTests {
         Assert.assertEquals(result, "this is a {test sentence")
     }
 
+    @Test
+    fun testContext() {
+        val context = Context()
+        context.addVariable("var1", 2)
+
+        Assert.assertTrue(context.containsVariable("var1"))
+        Assert.assertEquals(context.getVariable("var1"), 2)
+
+        context.clean()
+        Assert.assertFalse(context.containsVariable("var1"))
+    }
 }
