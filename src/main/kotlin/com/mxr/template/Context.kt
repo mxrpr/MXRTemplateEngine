@@ -18,4 +18,6 @@ class Context {
     fun getVariable(name: String): Any? {
         return this.store[name]
     }
+
+    fun clean() = this.store.clear()
 }
