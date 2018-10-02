@@ -15,7 +15,7 @@ class EachNode(text: String) : Node(text) {
 
     init {
         this.hasScope = true
-        this.loopVariableName = this.text.substring(2, this.text.length - 2).split(" ")[1]
+        this.loopVariableName = this.text.substring(2, this.text.length - 2).split(" ")[2]
     }
 
     override fun render(context: Context): String {
