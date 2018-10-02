@@ -12,5 +12,5 @@ internal enum class TokenType {
 
 internal class Token(val textFragment: String, val tokenType: TokenType) {
 
-    override fun toString(): String = "${this.textFragment}"
+    override fun toString(): String = this.textFragment
 }

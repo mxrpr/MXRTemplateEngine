@@ -10,7 +10,7 @@ import java.lang.StringBuilder
  * Value will be rendered if the key doesn't exist, is false, or is an empty list.
  */
 internal class InvertedSectionNode(text: String) : Node(text) {
-    var variableName: String = text.substring(3, this.text.length - 2)
+    private val variableName: String = text.substring(3, this.text.length - 2)
 
     init {
         this.hasScope = true

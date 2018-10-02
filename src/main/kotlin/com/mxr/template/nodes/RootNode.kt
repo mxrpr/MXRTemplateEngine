@@ -12,7 +12,7 @@ internal class RootNode: Node() {
 
 
     override fun render(context: Context) : String {
-        val result: StringBuilder = StringBuilder(1000)
+        val result = StringBuilder(1000)
         for (child in this.childrens) {
             result.append(child.render(context))
         }

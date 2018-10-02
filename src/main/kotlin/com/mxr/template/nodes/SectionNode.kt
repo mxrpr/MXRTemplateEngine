@@ -16,7 +16,7 @@ import java.lang.StringBuilder
  * and slash will be rendered and displayed times.
 */
 internal class SectionNode(text: String): Node(text) {
-    var variableName: String = text.substring(3, this.text.length-2)
+    private val variableName: String = text.substring(3, this.text.length-2)
 
     init {
         this.hasScope = true

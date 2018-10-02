@@ -13,7 +13,7 @@ internal class ForNode(text: String) : Node(text) {
 
     init {
         this.hasScope = true
-        var components = this.text.substring(2, this.text.length -2).split(" ")
+        val components = this.text.substring(2, this.text.length -2).split(" ")
         if (components.size < 4) {
             throw Exception("Problem in parsing element: '${this.text}'")
         }
@@ -26,11 +26,11 @@ internal class ForNode(text: String) : Node(text) {
             throw Exception("No variable in context '${this.variableName}' in expression '${this.text}'")
         }
 
-        val _arr = context.getVariable(this.variableName)
+        val arr = context.getVariable(this.variableName)
         val content = StringBuilder(500)
 
-        if (_arr is Array<*>) {
-            for (element in _arr) {
+        if (arr is Array<*>) {
+            for (element in arr) {
                 context.addVariable(this.loopVariableName, element!!)
                 for (child in this.childrens) {
                     content.append(child.render(context))

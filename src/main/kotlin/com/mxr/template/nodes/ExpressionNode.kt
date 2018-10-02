@@ -2,6 +2,7 @@ package com.mxr.template.nodes
 
 import com.mxr.template.Context
 import com.mxr.RPNRunner
+import com.mxr.ValueProvider
 
 /**
  *
@@ -10,22 +11,19 @@ import com.mxr.RPNRunner
  * {{= {{var1}} + {{var2}} * ( {{var2}} / {{var1}}) }}
  *
  * */
-internal class ExpressionNode(text: String): Node(text) {
-   private val expression = text.substring(2, text.length-2)
+internal class ExpressionNode(text: String): Node(text), ValueProvider {
+
+    private val expression = text.substring(3, text.length-2).trim()
+    private var context: Context? = null
 
     override fun render(context: Context): String {
-        val regexp = "\\{\\{.+?\\}\\}".toRegex()
-        val sequence = regexp.findAll(text)
-        for (match in sequence) {
-            val varName = match.value.substring(2, match.value.length-2)
-            if (!context.containsVariable(varName)) {
-                throw Exception("Variable $varName does not exists in context. Expression: $expression")
-            }
-            this.expression.replace(match.value, context.getVariable(varName).toString())
-        }
-
-        val expRunner = RPNRunner()
+        this.context = context
+        val expRunner = RPNRunner(this)
         return  expRunner.calculate(this.expression).toString()
+    }
+
+    override fun getValue(variableName: String): Double {
+        return (this.context?.getVariable(variableName.trim()) as Number).toDouble()
     }
 
     override fun toString(): String = "ExpressionNode: ${this.expression}"
