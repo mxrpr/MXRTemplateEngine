@@ -91,35 +91,22 @@ class MXRTemplateEngine(private val content: String) {
      * processed durin building the Abstract Syntax Tree
      */
     private fun createNodeFromToken(token: Token): Node {
-        if (token.tokenType == TokenType.TEXT_TOKEN)
-            return TextNode(token.textFragment)
+        when (token.tokenType) {
+            TokenType.TEXT_TOKEN        -> return TextNode(token.textFragment)
+            TokenType.VARIABLE_TOKEN    -> return VariableNode(token.textFragment)
+            TokenType.COMMENT_TOKEN     -> return CommentNode(token.textFragment)
+            TokenType.CLOSE_BLOCK_TOKEN -> return EndNode(token.textFragment)
+            TokenType.EXPRESSION_TOKEN  -> return ExpressionNode(token.textFragment)
+            TokenType.OPEN_BLOCK_TOKEN  ->
+                when {
+                    token.textFragment.contains("each") -> return EachNode(token.textFragment)
+                    token.textFragment.contains("for")  -> return ForNode(token.textFragment)
+                    token.textFragment.contains("if")   -> return IfNode(token.textFragment)
+                    token.textFragment.contains("else") -> return ElseNode(token.textFragment)
+                    token.textFragment.contains("{{#")  -> return SectionNode(token.textFragment)
+                    token.textFragment.contains("{{^")  -> return InvertedSectionNode(token.textFragment)
+                }
 
-        else if (token.tokenType == TokenType.VARIABLE_TOKEN)
-            return VariableNode(token.textFragment)
-
-        else if (token.tokenType == TokenType.COMMENT_TOKEN)
-            return CommentNode(token.textFragment)
-
-        else if (token.tokenType == TokenType.CLOSE_BLOCK_TOKEN)
-            return EndNode(token.textFragment)
-
-        else if (token.tokenType == TokenType.EXPRESSION_TOKEN)
-            return ExpressionNode(token.textFragment)
-
-        else if (token.tokenType == TokenType.OPEN_BLOCK_TOKEN) {
-            if (token.textFragment.contains("each")) {
-                return EachNode(token.textFragment)
-            } else if (token.textFragment.contains("for")) {
-                return ForNode(token.textFragment)
-            } else if (token.textFragment.contains("if")) {
-                return IfNode(token.textFragment)
-            } else if (token.textFragment.contains("else")) {
-                return ElseNode(token.textFragment)
-            } else if (token.textFragment.contains("{{#")) {
-                return SectionNode(token.textFragment)
-            } else if (token.textFragment.contains("{{^")) {
-                return InvertedSectionNode(token.textFragment)
-            }
         }
 
         throw Exception("Parse error at: ${token.textFragment}")
