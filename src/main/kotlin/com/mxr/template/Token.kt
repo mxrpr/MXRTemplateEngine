@@ -1,6 +1,6 @@
 package com.mxr.template
 
-enum class TokenType {
+internal enum class TokenType {
     NONE_TOKEN,
     TEXT_TOKEN,
     VARIABLE_TOKEN,
@@ -10,10 +10,7 @@ enum class TokenType {
     EXPRESSION_TOKEN
 }
 
-class Token(textFragment: String, tokenType: TokenType) {
-    val textFragment : String = textFragment
-    val tokenType: TokenType = tokenType
+internal class Token(val textFragment: String, val tokenType: TokenType) {
 
     override fun toString(): String = "${this.textFragment}"
-
 }

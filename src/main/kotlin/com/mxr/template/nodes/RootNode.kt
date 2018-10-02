@@ -8,7 +8,7 @@ import java.lang.StringBuilder
  * childs of this node.
  * During content generation, this  object is called.
  */
-class RootNode: Node() {
+internal class RootNode: Node() {
 
 
     override fun render(context: Context) : String {

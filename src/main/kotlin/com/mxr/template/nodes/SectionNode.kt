@@ -15,7 +15,7 @@ import java.lang.StringBuilder
  * If the person key exists and has a non-false value, the content between the pound
  * and slash will be rendered and displayed times.
 */
-class SectionNode(text: String): Node(text) {
+internal class SectionNode(text: String): Node(text) {
     var variableName: String = text.substring(3, this.text.length-2)
 
     init {

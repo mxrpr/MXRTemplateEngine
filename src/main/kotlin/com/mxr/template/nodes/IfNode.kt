@@ -10,7 +10,7 @@ import java.lang.StringBuilder
  * Example:
  * {% if var > var2 %}
  */
-class IfNode(text: String) : Node(text) {
+internal class IfNode(text: String) : Node(text) {
 
     private val lhs: String
     private val operation: String

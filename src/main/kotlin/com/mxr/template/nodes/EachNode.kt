@@ -9,7 +9,7 @@ import com.mxr.template.Context
  *     {{it}}
  * {% end %}
  */
-class EachNode(text: String) : Node(text) {
+internal class EachNode(text: String) : Node(text) {
 
     private val loopVariableName: String
 

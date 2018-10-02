@@ -10,7 +10,7 @@ import com.mxr.RPNRunner
  * {{= {{var1}} + {{var2}} * ( {{var2}} / {{var1}}) }}
  *
  * */
-class ExpressionNode(text: String): Node(text) {
+internal class ExpressionNode(text: String): Node(text) {
    private val expression = text.substring(2, text.length-2)
 
     override fun render(context: Context): String {

@@ -7,7 +7,7 @@ import java.lang.StringBuilder
  * ForNode
  * {% for items2 in items %}
  */
-class ForNode(text: String) : Node(text) {
+internal class ForNode(text: String) : Node(text) {
     private val variableName: String
     private val loopVariableName: String
 

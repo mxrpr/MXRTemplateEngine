@@ -8,7 +8,7 @@ import com.mxr.template.Context
  * try to find the name key in the current context. If there is no name key,
  * nothing will be rendered.
  */
-class VariableNode(text: String) : Node(text) {
+internal class VariableNode(text: String) : Node(text) {
 
     private val variable: String = text.substring(2, text.length - 2)
 
@@ -17,6 +17,6 @@ class VariableNode(text: String) : Node(text) {
         if (!context.containsVariable(this.variable))
             throw Exception("Variable '${this.variable}' was not found in context")
 
-        return this.text.replace(this.text, context.getVariable(this.variable).toString())
+        return  context.getVariable(this.variable).toString()
     }
 }
