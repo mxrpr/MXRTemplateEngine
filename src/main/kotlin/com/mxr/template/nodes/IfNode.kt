@@ -11,31 +11,32 @@ import java.lang.StringBuilder
  * {% if var > var2 %}
  */
 class IfNode(text: String) : Node(text) {
+
     private val lhs: String
     private val operation: String
     private val rhs: String
 
     init {
         this.hasScope = true
-        val componens = this.text.substring(2, this.text.length - 2).trim().split(" ")
-        if (componens.size < 4) {
+        val components = this.text.substring(2, this.text.length - 2).trim().split(" ")
+        if (components.size < 4) {
             throw Exception("Parse error at : '${this.text}'")
         }
-        this.lhs = componens[1]
-        this.operation = componens[2]
-        this.rhs = componens[3]
+        this.lhs = components[1]
+        this.operation = components[2]
+        this.rhs = components[3]
     }
 
     override fun render(context: Context): String {
         // check for variables in context
         if (!context.containsVariable(this.lhs) ||
-                !context.containsVariable(this.lhs)) {
-            throw java.lang.Exception("Check for variables in '${this.text}'")
+                !context.containsVariable(this.rhs)) {
+            throw java.lang.Exception("Check for variables in '${this.text}'. Variable was not found in context.")
         }
 
         val result = StringBuilder(500)
-        // run the true parst
-        if (this.op()) {
+        // run the true part
+        if (this.op(context)) {
             for (child in this.childrens) {
                 if (child is ElseNode)
                     break
@@ -57,12 +58,21 @@ class IfNode(text: String) : Node(text) {
         return result.toString()
     }
 
-    private fun op(): Boolean {
+    private fun op(context: Context): Boolean {
+        val lhsNum = context.getVariable(this.lhs)
+        val rhsNum = context.getVariable(this.rhs)
+
+        if (lhsNum !is Number ||
+                rhsNum !is Number)
+            throw Exception("Check ${this.lhs} and ${this.rhs} whether they are numbers in expression: ${this.text}")
+
+        val result = lhsNum.toDouble().compareTo(rhsNum.toDouble())
+
         return when (this.operation) {
-            ">" -> this.lhs > this.rhs
-            "<" -> this.lhs < this.rhs
-            ">=" -> this.lhs >= this.rhs
-            "<=" -> this.lhs <= this.rhs
+            ">" -> result > 0
+            "<" -> result <  0
+            ">=" -> result >= 0
+            "<=" -> result <= 0
             else -> false
         }
     }
