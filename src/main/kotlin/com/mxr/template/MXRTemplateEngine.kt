@@ -4,17 +4,19 @@ import com.mxr.template.nodes.*
 import java.io.File
 import java.util.*
 
+
+
 /**
  * From an input string or file parses the
  * template and generates the output
  */
-class MXRTemplateEngine(content: String) {
+class MXRTemplateEngine(private val content: String) {
 
     private val VAR_TOKEN_START: String = "\\{\\{"
     private val VAR_TOKEN_END: String = "\\}\\}"
     private val BLOCK_TOKEN_START: String = "\\{%"
     private val BLOCK_TOKEN_END: String = "%\\}"
-    private val COMMENT_TOKEN_START = "\\{\\{!"
+    private val COMMENT_TOKEN_START = "\\{\\{\\!"
     private val COMMENT_TOKEN_END = "\\}\\}"
     private val SECTION_TOKEN_START = "\\{\\{#"
     private val SECTION_TOKEN_END = "\\}\\}"
@@ -23,18 +25,26 @@ class MXRTemplateEngine(content: String) {
     private val EXPRESSION_TOKEN_START = "\\{\\{="
     private val EXPRESSION_TOKEN_END = "\\}\\}"
 
-    private val REGEXP = "<.+?>|$EXPRESSION_TOKEN_START.+?$EXPRESSION_TOKEN_END| " +
+    private val REGEXP = "$EXPRESSION_TOKEN_START.+?$EXPRESSION_TOKEN_END| " +
             "$INVERSE_SECTION_TOKEN_START.+?$INVERSE_SECTION_TOKEN_END|" +
             "$COMMENT_TOKEN_START.+?$COMMENT_TOKEN_END|" +
             "$SECTION_TOKEN_START.+?$SECTION_TOKEN_END|" +
             "$VAR_TOKEN_START.+?$VAR_TOKEN_END|" +
             "$BLOCK_TOKEN_START.+?$BLOCK_TOKEN_END|" +
-            "[\\w\\s:;><|'\\/-=]+"
+            "[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]+|" +
+            "\\{[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*|" +
+             "[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*\\}"
+//            "({(?!\\{))?[!\"\\#\$%&'()*+,\\-\\./:;<=>?@\\[\\\\\\]^_`~ \\w\\s]*"
+            // "\\{(?!\\{)"
+            //"[\\w\\s:;\\.><|'\\/-=]+"
 
-    val content = content
 
-    constructor(file: File) : this(file.readText()) {
-    }
+    /**
+     * Constructor with file
+     *
+     * @param File The file containing the text
+     */
+    constructor(file: File) : this(file.readText())
 
     /**
      * Parse the content and return the generated file
@@ -46,6 +56,9 @@ class MXRTemplateEngine(content: String) {
         return rootNode.render(context)
     }
 
+    /*
+     * Create Tokens from the string elements
+     */
     private fun parseTokens(tokens: Array<String>): Array<Token> {
         val result = mutableListOf<Token>()
         for (token in tokens) {
@@ -73,6 +86,10 @@ class MXRTemplateEngine(content: String) {
         return result.toTypedArray()
     }
 
+    /**
+     * Process tokens and create nodes from them. Nodes will be
+     * processed durin building the Abstract Syntax Tree
+     */
     private fun createNodeFromToken(token: Token): Node {
         if (token.tokenType == TokenType.TEXT_TOKEN)
             return TextNode(token.textFragment)
@@ -82,6 +99,9 @@ class MXRTemplateEngine(content: String) {
 
         else if (token.tokenType == TokenType.COMMENT_TOKEN)
             return CommentNode(token.textFragment)
+
+        else if (token.tokenType == TokenType.CLOSE_BLOCK_TOKEN)
+            return EndNode(token.textFragment)
 
         else if (token.tokenType == TokenType.EXPRESSION_TOKEN)
             return ExpressionNode(token.textFragment)
@@ -105,6 +125,9 @@ class MXRTemplateEngine(content: String) {
         throw Exception("Parse error at: ${token.textFragment}")
     }
 
+    /**
+     * Build the Abstract Syntax Tree
+     */
     private fun buildAST(tokens: Array<Token>): RootNode {
         val rootNode = RootNode()
         val scopeStack = Stack<Node>()
@@ -130,6 +153,12 @@ class MXRTemplateEngine(content: String) {
         return rootNode
     }
 
+    /**
+     * Divide the content by tokens
+     *
+     * @param String The content
+     * @return Array<String> Array of strng chunks
+     */
     private fun getStringTokens(content: String): Array<String> {
         val result = mutableListOf<String>()
         val regexp = REGEXP.toRegex()
