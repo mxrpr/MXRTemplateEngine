@@ -1,0 +1,3 @@
+[submodule "exp2rpn"]
+	path = exp2rpn
+	url = https://github.com/mxrpr/exp2rpn.git
