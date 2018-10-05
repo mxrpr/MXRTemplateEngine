@@ -1,4 +1,14 @@
+
 **Simple template engine written in Kotlin, which provides a simple syntax similar to Mustache.**
+
+To pull the sources:
+
+```
+git pull --recurse-submodules
+git submodule update --remote --recursive
+
+```
+
 **Features:**
 
 **Variable:**
