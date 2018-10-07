@@ -238,16 +238,97 @@ class TemplateTests {
         this.runTemplate(templateString, context)
     }
 
-    @Test(expected = Exception::class)
-    fun testIfNode_without_end() {
+//    @Test(expected = Exception::class)
+//    fun testIfNode_without_end() {
+//        val context = Context()
+//        context.addVariable("var", 2)
+//        context.addVariable("var2", 1)
+//
+//        val templateString = "a {% if var < var2 %} this should not appear {% else %} this should appear b"
+//        val result = this.runTemplate(templateString, context)
+//
+//        Assert.assertEquals(result, "a  this should appear b")
+//    }
+
+    @Test
+    fun testIfNode_with_else() {
         val context = Context()
-        context.addVariable("var", 2)
+        context.addVariable("var", 9)
         context.addVariable("var2", 1)
 
-        val templateString = "a {% if var < var2 %} this should not appear {% else %} this should appear b"
+        val templateString = "a {% if var < var2 %} this should not appear {%else%} this should appear b {%end%}"
         val result = this.runTemplate(templateString, context)
-        println("Result: $result")
-        Assert.assertEquals(result, "a  this should appear b")
+
+        Assert.assertEquals(result, "a  this should appear b ")
+    }
+
+    @Test
+    fun testIfNode_with_else2() {
+        val context = Context()
+        context.addVariable("var", 9)
+        context.addVariable("var2", 1)
+
+        val templateString = "a {% if var <= var2 %} this should not appear {%else%} this should appear b {%end%}"
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals(result, "a  this should appear b ")
+    }
+
+    @Test
+    fun testIfNode_with_else3() {
+        val context = Context()
+        context.addVariable("var", 9)
+        context.addVariable("var2", 1)
+
+        val templateString = "a {% if var >= var2 %} this should appear {%else%} this should not appear b {%end%}"
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals(result, "a  this should appear ")
+    }
+
+    @Test(expected = Exception::class)
+    fun testIfNode_variable_is_not_number_rhs() {
+        val context = Context()
+        context.addVariable("var", 9)
+        context.addVariable("var2", "variable")
+
+        val templateString = "a {% if var >= var2 %} this should appear {%else%} this should not appear b {%end%}"
+        this.runTemplate(templateString, context)
+    }
+
+    @Test(expected = Exception::class)
+    fun testIfNode_variable_is_not_number_lhs() {
+        val context = Context()
+        context.addVariable("var", "variable1")
+        context.addVariable("var2", "variable")
+
+        val templateString = "a {% if var >= var2 %} this should appear {%else%} this should not appear b {%end%}"
+        this.runTemplate(templateString, context)
+    }
+
+    @Test(expected = Exception::class)
+    fun testIfNode_with_no_variable_rhs() {
+        val context = Context()
+        context.addVariable("var", 9)
+        val templateString = "a {% if var < var2 %} this should not appear {%else%} this should appear b {%end%}"
+        this.runTemplate(templateString, context)
+    }
+
+    @Test(expected = Exception::class)
+    fun testIfNode_with_no_variable_lhs() {
+        val context = Context()
+        context.addVariable("var2", 9)
+        val templateString = "a {% if var < var2 %} this should not appear {%else%} this should appear b {%end%}"
+        this.runTemplate(templateString, context)
+    }
+
+    @Test(expected = Exception::class)
+    fun testIfNode_with_unknown_operation() {
+        val context = Context()
+        context.addVariable("var2", 9)
+        context.addVariable("var", 9)
+        val templateString = "a {% if var == var2 %} this should not appear {%else%} this should appear b {%end%}"
+        this.runTemplate(templateString, context)
     }
 
     @Test
