@@ -387,4 +387,12 @@ class TemplateTests {
         Assert.assertFalse(context.containsVariable("var1"))
     }
 
+    @Test
+    fun testExpression_with_wrong_content(){
+        val context = Context()
+        val templateString = "this is a test sentence {{= var1 + var2"
+        val result = this.runTemplate(templateString, context)
+
+        Assert.assertEquals("this is a test sentence {{= var1 + var2", result)
+    }
 }
