@@ -20,6 +20,14 @@ class TemplateTests {
         Assert.assertEquals(result, "this is a template with variable Test content.")
     }
 
+    @Test(expected = Exception::class)
+    fun testVariable_not_found() {
+        val context = Context()
+        context.addVariable("tetVariable", "Test content")
+        val templateString = "this is a template with variable {{testVariable}}."
+        this.runTemplate(templateString, context)
+    }
+
     @Test
     fun testTextNode() {
         val context = Context()
