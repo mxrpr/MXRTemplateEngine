@@ -395,4 +395,21 @@ class TemplateTests {
 
         Assert.assertEquals("this is a test sentence {{= var1 + var2", result)
     }
+
+    @Test
+    fun testStringRepresentation(){
+        Assert.assertEquals(VariableNode("{{var}}").toString(), "VariableNode: var")
+        Assert.assertEquals(ElseNode("").toString(), "ElseNode")
+        Assert.assertEquals(EachNode("{% each items %}").toString(), "EachNode: items")
+        Assert.assertEquals(IfNode("{% if var < var2 %}").toString(), "IfNode: '{% if var < var2 %}'")
+        Assert.assertEquals(SectionNode("{{#person}}").toString(), "SectionNode: '{{#person}}', variable: 'person'")
+        Assert.assertEquals(InvertedSectionNode("{{^person}}").toString(), "InvertedSectionNode: '{{^person}}', variable: 'person'")
+        Assert.assertEquals(TextNode("text").toString(), "TextNode text")
+        Assert.assertEquals(CommentNode("{{!this is a comment}}").toString(), "CommentNode: {{!this is a comment}}")
+        Assert.assertEquals(ExpressionNode("{{= {{var1}} + {{var2}} * ( {{var2}} / {{var1}}) }}").toString(),
+                "ExpressionNode: {{var1}} + {{var2}} * ( {{var2}} / {{var1}})")
+        Assert.assertEquals(RootNode().toString(), "RootNode: child number: 0")
+
+
+    }
 }
