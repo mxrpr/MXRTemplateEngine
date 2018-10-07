@@ -13,11 +13,20 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
-
+apply plugin: "jacoco"
 
 repositories {
       mavenLocal()
       jcenter()
+}
+
+jacoco {
+    toolVersion = "0.8.1"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+task applicationCodeCoverageReport(type:JacocoReport){
+    sourceSets sourceSets.main
 }
 
 dependencies {
@@ -67,3 +76,12 @@ task runExample(type:Exec) {
   //on windows:
   commandLine 'java', '-jar', 'exp2rpn.jar'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
