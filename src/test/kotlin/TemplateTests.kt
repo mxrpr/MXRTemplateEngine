@@ -176,6 +176,22 @@ class TemplateTests {
         Assert.assertEquals(result, "a  1  2  b")
     }
 
+    @Test(expected = Exception::class)
+    fun testForNode_wrong_parsing() {
+        val context = Context()
+        context.addVariable("items", arrayOf("1", "2"))
+        val templateString = "a {%forelementinitems %} {{element}} {% end %} b"
+        this.runTemplate(templateString, context)
+    }
+
+    @Test(expected = Exception::class)
+    fun testForNode_variable_not_array() {
+        val context = Context()
+        context.addVariable("items", "not")
+        val templateString = "a {% for element in items %} {{element}} {% end %} b"
+        this.runTemplate(templateString, context)
+    }
+
     @Test
     fun testIfNode_true() {
         val context = Context()
