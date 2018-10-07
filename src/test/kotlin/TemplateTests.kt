@@ -157,6 +157,12 @@ class TemplateTests {
         val templateString = "a {% each items %}  {{it}} {% end %} b"
         this.runTemplate(templateString, context)
         Assert.fail("An exception should be thrown")
+    @Test(expected = Exception :: class)
+    fun testEachNode_variable_is_not_array() {
+        val context = Context()
+        context.addVariable("items", 2)
+        val templateString = "a {% each items %}  {{it}} {% end %} b"
+        this.runTemplate(templateString, context)
     }
 
     @Test(expected = Exception :: class)
