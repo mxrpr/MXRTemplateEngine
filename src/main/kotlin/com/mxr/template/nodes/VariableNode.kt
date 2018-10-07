@@ -19,4 +19,8 @@ internal class VariableNode(text: String) : Node(text) {
 
         return  context.getVariable(this.variable).toString()
     }
+
+    override fun toString(): String {
+        return "VariableNode: ${this.variable}"
+    }
 }

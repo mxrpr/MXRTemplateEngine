@@ -13,6 +13,4 @@ internal abstract class Node() {
     }
 
     abstract  fun render(context: Context): String
-
-    override fun toString(): String = "Node : ${this.text}"
 }

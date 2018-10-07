@@ -40,5 +40,5 @@ internal class SectionNode(text: String): Node(text) {
         return result.toString()
     }
 
-    override fun toString(): String = "SectionNode '${this.text}', variable: '${this.variableName}'"
+    override fun toString(): String = "SectionNode: '${this.text}', variable: '${this.variableName}'"
 }

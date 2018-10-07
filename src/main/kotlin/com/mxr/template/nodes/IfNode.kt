@@ -73,9 +73,9 @@ internal class IfNode(text: String) : Node(text) {
             "<" -> result <  0
             ">=" -> result >= 0
             "<=" -> result <= 0
-            else -> false
+            else -> throw Exception("Unknown operation: '${this.operation}'")
         }
     }
 
-    override fun toString(): String = "IfNode '${this.text}'"
+    override fun toString(): String = "IfNode: '${this.text}'"
 }

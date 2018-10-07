@@ -23,7 +23,7 @@ internal class EachNode(text: String) : Node(text) {
             throw Exception("No variable with name '${this.loopVariableName}' in Context. Expression: '${this.text}'")
 
         val loopVar = context.getVariable(this.loopVariableName) as? Array<*>
-                ?: throw Exception("No variable with name '${this.loopVariableName}' in Context. Expression: '${this.text}'")
+                ?: throw Exception("No array variable with name '${this.loopVariableName}' in Context. Expression: '${this.text}'")
 
         val content = StringBuilder(1000)
         for (value in loopVar) {
@@ -35,5 +35,9 @@ internal class EachNode(text: String) : Node(text) {
         }
 
         return content.toString()
+    }
+
+     override fun toString(): String {
+        return "EachNode: ${this.loopVariableName}"
     }
 }

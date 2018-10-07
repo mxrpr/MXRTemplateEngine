@@ -32,5 +32,5 @@ internal class InvertedSectionNode(text: String) : Node(text) {
         return result.toString()
     }
 
-    override fun toString(): String = "InvertedSectionNode '${this.text}', variable: '${this.variableName}'"
+    override fun toString(): String = "InvertedSectionNode: '${this.text}', variable: '${this.variableName}'"
 }

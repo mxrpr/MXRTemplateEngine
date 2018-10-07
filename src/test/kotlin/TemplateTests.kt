@@ -1,5 +1,7 @@
 import com.mxr.template.Context
 import com.mxr.template.MXRTemplateEngine
+import com.mxr.template.nodes.*
+import com.sun.org.apache.xpath.internal.ExpressionNode
 import org.junit.Assert
 import org.junit.Test
 
@@ -16,7 +18,7 @@ class TemplateTests {
         context.addVariable("testVariable", "Test content")
         val templateString = "this is a template with variable {{testVariable}}."
         val result = this.runTemplate(templateString, context)
-        println("Result: '$result'")
+
         Assert.assertEquals(result, "this is a template with variable Test content.")
     }
 
@@ -156,7 +158,8 @@ class TemplateTests {
         val context = Context()
         val templateString = "a {% each items %}  {{it}} {% end %} b"
         this.runTemplate(templateString, context)
-        Assert.fail("An exception should be thrown")
+    }
+
     @Test(expected = Exception :: class)
     fun testEachNode_variable_is_not_array() {
         val context = Context()
@@ -235,12 +238,12 @@ class TemplateTests {
     }
 
     @Test(expected = Exception::class)
-    fun testIfNode_false_with_else() {
+    fun testIfNode_parse_error() {
         val context = Context()
         context.addVariable("var", 2)
         context.addVariable("var2", 1)
 
-        val templateString = "a {% if var < var2 %} this should not appear {% else %} this should appear {% end %}b"
+        val templateString = "a {% ifvar<var2 %} this should not appear {% else %} this should appear b"
         this.runTemplate(templateString, context)
     }
 
@@ -337,6 +340,7 @@ class TemplateTests {
         this.runTemplate(templateString, context)
     }
 
+
     @Test
     fun testEmptyString() {
         val context = Context()
@@ -369,7 +373,7 @@ class TemplateTests {
         val context = Context()
         context.addVariable("var1", 2)
         context.addVariable("var2", 2)
-            val templateString = "this is a test sentence {{= var1 + var2 }}"
+        val templateString = "this is a test sentence {{= var1 + var2 }}"
         val result = this.runTemplate(templateString, context)
 
         Assert.assertEquals(result, "this is a test sentence 4.0")

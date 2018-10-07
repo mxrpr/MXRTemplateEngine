@@ -19,6 +19,6 @@ internal class RootNode: Node() {
         return result.toString()
     }
 
-    override fun toString(): String = "RootNode, child number: ${this.childrens.size}"
+    override fun toString(): String = "RootNode: child number: ${this.childrens.size}"
 
 }
