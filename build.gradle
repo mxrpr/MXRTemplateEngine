@@ -1,24 +1,31 @@
 
-buildscript {
-    ext.kotlin_version = '1.2.71'
-    
-    repositories {
-      jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 apply plugin: "jacoco"
 
-repositories {
-      mavenLocal()
-      jcenter()
+println "Project name is $name"
+
+buildscript {
+    ext.kotlin_version = '1.3.21'
+    
+    repositories {
+        jcenter()
+        mavenLocal()
+        maven {url "https://jitpack.io"}
+     }
+
+     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
+
+ repositories {
+        jcenter()
+        mavenLocal()
+        maven {url "https://jitpack.io"}
+ }
+
+
 
 jacoco {
     toolVersion = "0.8.1"
@@ -30,24 +37,14 @@ task applicationCodeCoverageReport(type:JacocoReport){
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-	compile(project(":exp2rpn"))
-
+    compile "com.github.mxrpr:exp2rpn:master"
+    
     testCompile("junit:junit:4.12")
+    testCompile "com.github.mxrpr:exp2rpn:master"
+
     testRuntime("org.junit.vintage:junit-vintage-engine:5.3.1")
-	compile(project(":exp2rpn"))
 }
 
-jar {
-    manifest {
-        attributes "Main-Class": "com.mxr.Exp2rpnKt"
-}
- 
-from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
 
 publishing {
     publications {
