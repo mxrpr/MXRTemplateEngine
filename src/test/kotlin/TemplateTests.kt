@@ -1,7 +1,7 @@
 import com.mxr.template.Context
 import com.mxr.template.MXRTemplateEngine
 import com.mxr.template.nodes.*
-import com.sun.org.apache.xpath.internal.ExpressionNode
+//import com.sun.org.apache.xpath.internal.ExpressionNode
 import org.junit.Assert
 import org.junit.Test
 
