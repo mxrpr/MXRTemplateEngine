@@ -9,7 +9,7 @@ import java.util.*
  * From an input string or file parses the
  * template and generates the output
  */
-class MXRTemplateEngine(private val content: String) {
+class MXRTemplateEngine(private var content: String) {
 
     private val VAR_TOKEN_START: String = "\\{\\{"
     private val VAR_TOKEN_END: String = "\\}\\}"
@@ -47,16 +47,36 @@ class MXRTemplateEngine(private val content: String) {
 
     /**
      * Empty constructor
-     * Parse the content and return the generated file
+     */
     constructor() : this("")
+
+    /**
+     * Parse the content and return the generated file.
+     * If the content is empty, then returns and empty string
+     *
+     * @param context
      */
     fun parse(context: Context): String {
+        if (this.content.trim().isEmpty())
+            return ""
+
         val tokens = this.parseTokens(this.getStringTokens(this.content))
         val rootNode = this.buildAST(tokens)
 
         return rootNode.render(context)
     }
 
+    /**
+     * Parse content
+     *
+     * @param contentStr
+     * @param context
+     */
+    fun parse(contentStr: String, context: Context): String {
+        this.content = contentStr
+
+        return this.parse(context)
+    }
     /*
      * Create Tokens from the string elements
      */
@@ -109,7 +129,6 @@ class MXRTemplateEngine(private val content: String) {
                     token.textFragment.contains("{{^")  -> return InvertedSectionNode(token.textFragment)
                 }
             TokenType.NONE_TOKEN -> throw ParseException("Unkown token '$token.tokenType'")
-
         }
 
         throw Exception("Parse error at: ${token.textFragment}")
