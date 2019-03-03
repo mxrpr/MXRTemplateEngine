@@ -46,7 +46,9 @@ class MXRTemplateEngine(private val content: String) {
     constructor(file: File) : this(file.readText())
 
     /**
+     * Empty constructor
      * Parse the content and return the generated file
+    constructor() : this("")
      */
     fun parse(context: Context): String {
         val tokens = this.parseTokens(this.getStringTokens(this.content))
