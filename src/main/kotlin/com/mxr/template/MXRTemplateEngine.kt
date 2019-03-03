@@ -77,6 +77,21 @@ class MXRTemplateEngine(private var content: String) {
 
         return this.parse(context)
     }
+
+    /**
+     * Parse content from template filefile
+     *
+     * @param contentFileName
+     * @param context
+     */
+    @Throws(ParseException::class)
+    fun parseTemplateFile(contentFileName: String, context: Context): String {
+        val file = File(contentFileName)
+        if (!file.exists())
+            throw ParseException("Tempplate file does not exist")
+
+        return this.parse(file.readText(), context)
+    }
     /*
      * Create Tokens from the string elements
      */
