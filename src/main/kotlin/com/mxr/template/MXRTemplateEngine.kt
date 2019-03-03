@@ -87,8 +87,9 @@ class MXRTemplateEngine(private val content: String) {
 
     /**
      * Process tokens and create nodes from them. Nodes will be
-     * processed durin building the Abstract Syntax Tree
+     * processed during building the Abstract Syntax Tree
      */
+    @Throws(ParseException::class)
     private fun createNodeFromToken(token: Token): Node {
         when (token.tokenType) {
             TokenType.TEXT_TOKEN        -> return TextNode(token.textFragment)
@@ -105,6 +106,7 @@ class MXRTemplateEngine(private val content: String) {
                     token.textFragment.contains("{{#")  -> return SectionNode(token.textFragment)
                     token.textFragment.contains("{{^")  -> return InvertedSectionNode(token.textFragment)
                 }
+            TokenType.NONE_TOKEN -> throw ParseException("Unkown token '$token.tokenType'")
 
         }
 
